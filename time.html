@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Час в Україні</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="time.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Час в Україні</h1>
+    <p>Натисніть кнопку, щоб показати поточний час (Europe/Kyiv).</p>
+
+    <button id="showTimeBtn">Показати час</button>
+
+    <div id="timeBox" class="time-box hidden" aria-live="polite"></div>
+
+    <a class="back-link" href="index.html">← Назад</a>
+  </div>
+
+  <script src="time.js"></script>
+</body>
+</html>
