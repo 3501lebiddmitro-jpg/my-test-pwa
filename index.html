@@ -2,20 +2,120 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Простий PWA</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Matrix Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#2563eb">
   <link rel="manifest" href="manifest.json" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Простий PWA">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/alpinejs" defer></script>
 </head>
-<body>
-  <div class="container">
-    <h1>Привіт, це PWA!</h1>
-    <p><a href="time.html">Перейти на сторінку «Час»</a></p>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+  <div
+    x-data="chatApp()"
+    class="bg-white p-6 rounded shadow-md w-full max-w-md"
+    :class="accessToken ? 'md:max-w-3xl' : 'md:max-w-md'"
+  >
+    <template x-if="!accessToken">
+      <div>
+        <h2 class="text-xl font-bold mb-4">Login</h2>
+        <input x-model="username" placeholder="Username (Matrix)" class="border p-2 w-full mb-2 rounded" />
+        <input x-model="password" type="password" placeholder="Password" class="border p-2 w-full mb-2 rounded" />
+        <button @click="login()" class="bg-blue-500 text-white p-2 w-full rounded">Login</button>
+        <p x-text="error" class="text-red-500 mt-2"></p>
+      </div>
+    </template>
+
+    <template x-if="accessToken">
+      <div class="space-y-4">
+        <h1 class="text-2xl font-bold">Ви успішно авторизувались. Ваша панель керування</h1>
+        <div class="mb-2 p-3 bg-gray-100 rounded text-sm break-words">
+          <span class="font-bold">Your Matrix ID:</span>
+          <span class="ml-1" x-text="userId ? userId : 'Loading...'"></span>
+        </div>
+        <hr class="my-2" />
+        <section class="grid md:grid-cols-2 gap-4">
+          <article class="border rounded p-4">
+            <h2 class="text-lg font-semibold mb-2">Про мене</h2>
+            <ul class="text-sm space-y-1">
+              <li><span class="font-medium">Ім’я:</span> Катерина Лебідь</li>
+              <li><span class="font-medium">E-mail:</span> lebid_k134@zptkl.zp.ua</li>
+              <li><span class="font-medium">Телефон:</span> +380 XX XXX XX XX</li>
+              <li><span class="font-medium">Місто:</span> Запоріжжя</li>
+            </ul>
+          </article>
+
+          <article class="border rounded p-4">
+            <h2 class="text-lg font-semibold mb-2">Навички</h2>
+            <ul class="list-disc pl-5 text-sm space-y-1">
+              <li>HTML, CSS (Tailwind), JavaScript (Alpine.js)</li>
+              <li>REST API, JSON</li>
+              <li>Git / GitHub</li>
+            </ul>
+          </article>
+
+          <article class="md:col-span-2 border rounded p-4">
+            <h2 class="text-lg font-semibold mb-2">Досвід</h2>
+            <p class="text-sm">
+              Frontend trainee — навчальні проєкти: верстка, інтеграція з API (Matrix), реактивні інтерфейси на Alpine.js.
+            </p>
+          </article>
+        </section>
+      </div>
+    </template>
   </div>
+
+  <script>
+    function chatApp() {
+      return {
+        username: '',
+        password: '',
+        accessToken: '',
+        userId: '',
+        error: '',
+        localizeError(res, data) {
+          if (res && (res.status === 401 || res.status === 403 || (data && data.errcode === 'M_FORBIDDEN'))) {
+            return 'Невірний логін або пароль';
+          }
+          if (res && res.status === 429) {
+            return 'Забагато спроб. Спробуйте пізніше.';
+          }
+          if (res && res.status >= 500) {
+            return 'Сервер тимчасово недоступний. Спробуйте знову пізніше.';
+          }
+          return 'Помилка під час входу';
+        },
+        async login() {
+          this.error = '';
+          if (!this.username || !this.password) {
+            this.error = 'Будь ласка, заповніть логін і пароль';
+            return;
+          }
+          try {
+            const res = await fetch('https://matrix.org/_matrix/client/r0/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                type: 'm.login.password',
+                user: this.username,
+                password: this.password
+              })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (res.ok && data && data.access_token) {
+              this.accessToken = data.access_token;
+              this.userId = data.user_id || '';
+              this.error = '';
+            } else {
+              this.error = this.localizeError(res, data);
+            }
+          } catch (e) {
+            this.error = 'Помилка мережі. Перевірте з’єднання з інтернетом.';
+          }
+        }
+      }
+    }
+  </script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -1,21 +1,15 @@
-const CACHE_NAME = 'pwa-example-v3'; 
+const CACHE_NAME = 'matrix-chat-v1';
 const ASSETS = [
-  './',                 
+  './',
   './index.html',
   './style.css',
   './app.js',
-
+  './manifest.json',
   './install.html',
   './install.css',
   './install.js',
-
-  './time.html',
-  './time.css',
-  './time.js',
-
   './icons/icon-192.png',
-  './icons/icon-512.png',
-  './manifest.json'
+  './icons/icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -41,6 +35,10 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
 
   if (request.method !== 'GET') return;
+
+  if (request.url.includes('matrix.org') || request.url.includes('_matrix')) {
+    return;
+  }
 
   event.respondWith(
     (async () => {

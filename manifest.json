@@ -1,11 +1,11 @@
 {
-  "name": "Мій Простий PWA",
-  "short_name": "Простий PWA",
-  "start_url": ".",
+  "name": "Matrix Chat PWA",
+  "short_name": "MatrixChat",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#4a90e2",
-  "description": "Приклад простого прогресивного веб-додатку.",
+  "theme_color": "#2563eb",
+  "description": "PWA клієнт для авторизації у Matrix.",
   "icons": [
     { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }

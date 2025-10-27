@@ -1,4 +1,3 @@
-// Регистрируем SW и на странице установки
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
@@ -15,9 +14,9 @@ window.addEventListener('beforeinstallprompt', (e) => {
 installButton.addEventListener('click', async () => {
   if (!deferredPrompt) return;
   deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  if (outcome === 'accepted') console.log('Пользователь установил приложение');
+  await deferredPrompt.userChoice;
   deferredPrompt = null;
+  installButton.classList.add('hidden');
 });
 
 window.addEventListener('appinstalled', () => {
