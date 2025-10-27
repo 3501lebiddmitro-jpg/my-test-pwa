@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
   <meta charset="UTF-8" />
   <title>Matrix Chat</title>
@@ -10,12 +11,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/alpinejs" defer></script>
 </head>
+
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
-  <div
-    x-data="chatApp()"
-    class="bg-white p-6 rounded shadow-md w-full max-w-md"
-    :class="accessToken ? 'md:max-w-3xl' : 'md:max-w-md'"
-  >
+  <div x-data="chatApp()" class="bg-white p-6 rounded shadow-md w-full max-w-md"
+    :class="accessToken ? 'md:max-w-3xl' : 'md:max-w-md'">
     <template x-if="!accessToken">
       <div>
         <h2 class="text-xl font-bold mb-4">Login</h2>
@@ -57,7 +56,8 @@
           <article class="md:col-span-2 border rounded p-4">
             <h2 class="text-lg font-semibold mb-2">Досвід</h2>
             <p class="text-sm">
-              Frontend trainee — навчальні проєкти: верстка, інтеграція з API (Matrix), реактивні інтерфейси на Alpine.js.
+              Frontend trainee — навчальні проєкти: верстка, інтеграція з API (Matrix), реактивні інтерфейси на
+              Alpine.js.
             </p>
           </article>
         </section>
@@ -118,4 +118,5 @@
   </script>
   <script src="app.js"></script>
 </body>
+
 </html>
